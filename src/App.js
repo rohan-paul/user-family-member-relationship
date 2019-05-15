@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Route, BrowserRouter, Switch, Router } from "react-router-dom";
 import history from "./history";
 import NotFound from "./Components/NotFound/NotFound";
-import StockAnalyticsDashBoard from "./Components/StockAnalytics/StockAnalyticsDashBoard";
 import AppDashBoard from "./Components/AppDashBoard";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -25,11 +24,6 @@ class App extends Component {
             <Switch>
               <Route path={"/"} component={AppDashBoard} />
 
-              <Route
-                exact
-                path={"/stock_dashboard"}
-                component={StockAnalyticsDashBoard}
-              />
               <Route component={NotFound} />
             </Switch>
           </div>

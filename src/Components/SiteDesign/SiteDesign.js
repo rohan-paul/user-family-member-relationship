@@ -31,24 +31,9 @@ import { ExpandLess, ExpandMore, Menu } from "@material-ui/icons";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import SiteLogo from "../../assets/Images/car.svg";
-import DashBoardIcon from "../../assets/Images/Icons/Icons.png";
-import AnalyticsIcon from "../../assets/Images/Icons/analytics.png";
-import ReportsIcon from "../../assets/Images/Icons/euro-96594_1280.png";
-import UserIcon from "../../assets/Images/Icons/5G-web-design-thum-1.jpg";
-import SystemIcon from "../../assets/Images/Icons/runer-silhouette-running-fast.png";
-import UsersIcon from "../../assets/Images/Icons/custom-web-design-free-template.png";
 import ToolsIcon from "../../assets/Images/Icons/images.jpg";
 import DepartmentsIcon from "../../assets/Images/Icons/Bold-and-Vibrant-colors.png";
-import TransportIcon from "../../assets/Images/Icons/bitcoin.svg";
-import ProductionIcon from "../../assets/Images/Icons/tools.png";
-import ResearchIcon from "../../assets/Images/Icons/startup-idea-innovation-business-bulb-big-thing.png";
-import EducationIcon from "../../assets/Images/Icons/education.png";
-import HackingIcon from "../../assets/Images/Icons/hacking.jpg";
-import MoneyIcon from "../../assets/Images/Icons/meeting.svg";
-import OnBoardPortsIcon from "../../assets/Images/Icons/images.jpeg";
-import OptionsIcon from "../../assets/Images/Icons/options.png";
-import ComputerIcon from "../../assets/Images/Icons/artwork_2x.png";
-import TruckIcon from "../../assets/Images/Icons/fast.svg";
+
 import AllRoutes from "../../Routes/DashboardRoutes";
 
 class SiteDesign extends React.Component {
@@ -158,7 +143,7 @@ class SiteDesign extends React.Component {
                   className={classes.title}
                   noWrap
                 >
-                  REACT APP
+                  Hello Joanne!
                 </Typography>
               )}
               <Switch

@@ -11,9 +11,10 @@ const theme = theme =>
         main: "#000000"
       },
       primary: {
-        main: theme ? "#f32c2c" : "#f7f71c"
+        main: theme ? "#f32c2c" : "#2196f3"
       }
     },
+
     typography: {
       useNextVariants: true
     }

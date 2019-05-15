@@ -25,3 +25,6 @@ The site is running at - [http://localhost:3000/dashboard](http://localhost:3000
 
 `cd client` and then `npm test`
 
+
+The overall app's color of the top toolbar is determined by
+./src/Components/AppDashBoard.js
