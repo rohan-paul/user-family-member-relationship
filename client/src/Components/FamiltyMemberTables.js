@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -37,11 +38,25 @@ class FamiltyMemberTables extends React.Component {
     order: "asc",
     orderBy: "calories",
     selected: [],
+    selectedFamilyMember: [],
     data: data,
-    familyData: FamilyMemberData,
+    familyData: [],
     page: 0,
     rowsPerPage: 5
   };
+
+  componentDidMount() {
+    axios
+      .get("api/familyMemberRoute")
+      .then(res => {
+        this.setState({
+          familyData: res.data
+        });
+      })
+      .catch(error => {
+        console.log("Error occured ", error);
+      });
+  }
 
   handleRequestSort = (event, property) => {
     const orderBy = property;
@@ -57,12 +72,37 @@ class FamiltyMemberTables extends React.Component {
   handleSelectAllClickFamilyData = event => {
     if (event.target.checked) {
       this.setState(state => ({
-        selected: state.FamilyMemberData.map(n => n._id)
+        selectedFamilyMember: state.familyData.map(n => n._id)
       }));
       return;
     }
-    this.setState({ selected: [] });
+    this.setState({ selectedFamilyMember: [] });
   };
+
+  handleClickFamilyMember = (event, id) => {
+    const { selectedFamilyMember } = this.state;
+    const selectedIndex = selectedFamilyMember.indexOf(id);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selectedFamilyMember, id);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selectedFamilyMember.slice(1));
+    } else if (selectedIndex === selectedFamilyMember.length - 1) {
+      newSelected = newSelected.concat(selectedFamilyMember.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selectedFamilyMember.slice(0, selectedIndex),
+        selectedFamilyMember.slice(selectedIndex + 1)
+      );
+    }
+    this.setState({ selectedFamilyMember: newSelected });
+  };
+
+  isSelectedFamilyMember = id =>
+    this.state.selectedFamilyMember.indexOf(id) !== -1;
+
+  // Function to handle the Unidentified Table
 
   handleSelectAllClick = event => {
     if (event.target.checked) {
@@ -111,6 +151,7 @@ class FamiltyMemberTables extends React.Component {
       order,
       orderBy,
       selected,
+      selectedFamilyMember,
       rowsPerPage,
       page
     } = this.state;
@@ -125,11 +166,11 @@ class FamiltyMemberTables extends React.Component {
     return (
       <React.Fragment>
         <Paper className={classes.root}>
-          <FamilyMemberTableToolbar numSelected={selected.length} />
+          <FamilyMemberTableToolbar numSelected={selectedFamilyMember.length} />
           <div className={classes.tableWrapper}>
             <Table className={classes.table} aria-labelledby="tableTitle">
               <FamilyMemberTableHead
-                numSelected={selected.length}
+                numSelected={selectedFamilyMember.length}
                 order={order}
                 orderBy={orderBy}
                 onSelectAllClick={this.handleSelectAllClickFamilyData}
@@ -140,19 +181,23 @@ class FamiltyMemberTables extends React.Component {
                 {stableSort(familyData, getSorting(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map(n => {
-                    const isSelected = this.isSelected(n._id);
+                    const isSelectedFamilyMember = this.isSelectedFamilyMember(
+                      n._id
+                    );
                     return (
                       <TableRow
                         hover
-                        onClick={event => this.handleClick(event, n._id)}
+                        onClick={event =>
+                          this.handleClickFamilyMember(event, n._id)
+                        }
                         role="checkbox"
-                        aria-checked={isSelected}
+                        aria-checked={isSelectedFamilyMember}
                         tabIndex={-1}
                         key={n._id}
-                        selected={isSelected}
+                        selectedFamilyMember={isSelectedFamilyMember}
                       >
                         <TableCell padding="checkbox">
-                          <Checkbox checked={isSelected} />
+                          <Checkbox checked={isSelectedFamilyMember} />
                         </TableCell>
                         <TableCell component="th" scope="row" padding="none">
                           {n.firstName}
