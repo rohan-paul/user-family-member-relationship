@@ -1,0 +1,14 @@
+{
+  "extends": "airbnb",
+  "rules": {
+    "func-names": [
+      "error",
+      "never"
+    ],
+    "comma-dangle": "off"
+  },
+  "globals": {
+    "localStorage": true,
+    "fetch": true
+  }
+}
