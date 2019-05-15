@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Switch, Route } from "react-router-dom";
 import NotFound from "../Components/NotFound/NotFound";
+import FamiltyMemberTables from "../Components/FamiltyMemberTables";
 
 import DashBoard from "../Dashboard";
 
@@ -10,6 +11,7 @@ export class DashboardRoutes extends Component {
       <div>
         <Switch>
           <Route exact path={"/"} component={DashBoard} />
+          <Route exact path={"/votercircle"} component={FamiltyMemberTables} />
           <Route component={NotFound} />
         </Switch>
       </div>

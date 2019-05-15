@@ -13,6 +13,7 @@ import {
   faAnchor,
   faUser
 } from "@fortawesome/free-solid-svg-icons";
+import FamiltyMemberTables from "./Components/FamiltyMemberTables";
 library.add(faFilter, faDownload, faCalendarAlt, faShip, faAnchor, faUser);
 
 class App extends Component {
@@ -23,6 +24,11 @@ class App extends Component {
           <div>
             <Switch>
               <Route path={"/"} component={AppDashBoard} />
+              <Route
+                exact
+                path={"/votercircle"}
+                component={FamiltyMemberTables}
+              />
 
               <Route component={NotFound} />
             </Switch>
