@@ -68,7 +68,11 @@ export class EditToAddFamilyMember extends Component {
   };
 
   handleFormSubmit = () => {
-    const { addItemToFamilyMember } = this.props;
+    const {
+      addItemToFamilyMember,
+      confirmDeleteCustom,
+      checkedItems
+    } = this.props;
     const {
       firstName,
       lastName,
@@ -112,6 +116,18 @@ export class EditToAddFamilyMember extends Component {
             phone,
             relationship
           });
+          this.props.updateFamilyMemberState();
+          //   confirmDeleteCustom(checkedItems);
+          axios
+            .delete("/api/unidentifiedmember-route/delete", {
+              data: {
+                unidentifiedMember_id_list_arr: checkedItems
+              }
+            })
+            .then(() => {
+              this.props.updateUnidentifiedMemberState();
+            });
+
           this.setState(
             {
               open: false,

@@ -91,7 +91,6 @@ class UnidentifiedTableHead extends React.Component {
 }
 
 UnidentifiedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
   onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.string.isRequired,

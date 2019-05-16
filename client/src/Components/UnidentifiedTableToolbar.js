@@ -37,7 +37,6 @@ class UnidentifiedTableToolbar extends Component {
           [classes.highlight]: numSelected > 0
         })}
       >
-        {console.log("CHECKED ITEM IS ", checkedItems)}
         <div className={classes.title}>
           {numSelected > 0 ? (
             <Typography color="inherit" variant="subtitle1">
@@ -91,6 +90,13 @@ class UnidentifiedTableToolbar extends Component {
                         itemToEdit={this.props.itemToEdit}
                         addItemToFamilyMember={this.props.addItemToFamilyMember}
                         unSelectItems={this.props.unSelectItems}
+                        updateFamilyMemberState={
+                          this.props.updateFamilyMemberState
+                        }
+                        updateUnidentifiedMemberState={
+                          this.props.updateUnidentifiedMemberState
+                        }
+                        checkedItems={checkedItems}
                       />
                     </div>
                   ) : null}
@@ -132,8 +138,7 @@ class UnidentifiedTableToolbar extends Component {
 }
 
 UnidentifiedTableToolbar.propTypes = {
-  classes: PropTypes.object.isRequired,
-  numSelected: PropTypes.number.isRequired
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(toolbarStyles)(UnidentifiedTableToolbar);

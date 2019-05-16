@@ -9,8 +9,7 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
-import dataFromFile from "./familyData";
-import FamilyMemberData from "./FamilyMemberData";
+// import dataFromFile from "./familyData";
 import { stableSort } from "./UtilFunctions/Utils";
 import { getSorting } from "./UtilFunctions/Utils";
 import UnidentifiedTableHead from "./UnidentifiedTableHead";
@@ -39,7 +38,7 @@ const styles = theme => ({
 class FamiltyMemberTables extends React.Component {
   state = {
     order: "asc",
-    orderBy: "calories",
+    orderBy: "firstName",
     selected: [],
     selectedFamilyMember: [],
     unidentifiedData: [],
@@ -50,7 +49,10 @@ class FamiltyMemberTables extends React.Component {
 
   componentDidMount() {
     axios
-      .post("/api/unidentifiedmember-route/batch", dataFromFile)
+      .post(
+        "/api/unidentifiedmember-route/batch",
+        this.props.location.state.data
+      )
       .then(res => {
         this.setState(
           {
@@ -71,6 +73,32 @@ class FamiltyMemberTables extends React.Component {
         );
       });
   }
+
+  updateUnidentifiedMemberState = () => {
+    axios
+      .get("api/unidentifiedmember-route")
+      .then(res => {
+        this.setState({
+          unidentifiedData: res.data
+        });
+      })
+      .catch(error => {
+        console.log("Error occured ", error);
+      });
+  };
+
+  updateFamilyMemberState = () => {
+    axios
+      .get("api/familyMemberRoute")
+      .then(res => {
+        this.setState({
+          familyData: res.data
+        });
+      })
+      .catch(error => {
+        console.log("Error occured ", error);
+      });
+  };
 
   handleRequestSort = (event, property) => {
     const orderBy = property;
@@ -179,6 +207,7 @@ class FamiltyMemberTables extends React.Component {
   };
 
   confirmDeleteCustom = idArr => {
+    console.log("Delete activated with ", idArr);
     let payload = {
       unidentifiedMember_id_list_arr: idArr
     };
@@ -232,7 +261,6 @@ class FamiltyMemberTables extends React.Component {
     } = this.state;
 
     const itemToEdit = this.returnDocumentToEdit(this.state.selected[0]);
-    // console.log("ITEM TO EDIT IS ", itemToEdit);
 
     const emptyRows =
       rowsPerPage -
@@ -245,7 +273,6 @@ class FamiltyMemberTables extends React.Component {
     return (
       <React.Fragment>
         <Paper className={classes.root}>
-          {console.log("SELECTED ITEM IS ", selected)}
           <FamilyMemberTableToolbar
             numSelectedFamilyMember={selectedFamilyMember.length}
           />
@@ -327,6 +354,8 @@ class FamiltyMemberTables extends React.Component {
             addItemToFamilyMember={this.addItemToFamilyMember}
             unSelectItems={this.unSelectItems}
             confirmDeleteCustom={this.confirmDeleteCustom}
+            updateFamilyMemberState={this.updateFamilyMemberState}
+            updateUnidentifiedMemberState={this.updateUnidentifiedMemberState}
           />
           <div className={classes.tableWrapper}>
             <Table className={classes.table} aria-labelledby="tableTitle">
@@ -405,3 +434,13 @@ FamiltyMemberTables.propTypes = {
 };
 
 export default withStyles(styles)(FamiltyMemberTables);
+
+/*
+
+ {console.log("FILE DATA IS ", unidentifiedData)}
+ {console.log(
+    "DATA PASSED FROM PARENT ",
+    this.props.location.state.data
+  )}
+
+  */

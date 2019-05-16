@@ -1,9 +1,14 @@
+### MOST Important step is to upload a .csv file as the very first step
+
+- 1. From [http://localhost:3000/](http://localhost:3000/) you first need to upload the .csv file named "UnidentifiedFamilyData.csv" which I kept at dirctory `/client`
+- 2. From this .csv file some data will be uploaded and saved in MongoDB as the very first step.
+
 To launch this project in the local machine.
 
 First create a .env file in `./server` directory with the following details.
 
 ```js
-MONGO_DB=mongodb://localhost:27017/ies-db
+MONGO_DB=mongodb://localhost:27017/voter-circle
 
 NODE_ENV=development
 
@@ -19,7 +24,7 @@ Which will start both the client (port 3000) and server (port 5000) and launch t
 
 Then navigate to the public or the private (only for logged-in user) site
 
-The site is running at - [http://localhost:3000/dashboard](http://localhost:3000/dashboard)
+The site is running at - [http://localhost:3000/](http://localhost:3000/)
 
 #### To run the tests
 
@@ -28,3 +33,6 @@ The site is running at - [http://localhost:3000/dashboard](http://localhost:3000
 
 The overall app's color of the top toolbar is determined by
 ./src/Components/AppDashBoard.js
+
+
+
