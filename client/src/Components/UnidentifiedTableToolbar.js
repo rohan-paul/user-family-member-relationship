@@ -84,6 +84,7 @@ class UnidentifiedTableToolbar extends Component {
                       <EditToAddFamilyMember
                         itemToEdit={this.props.itemToEdit}
                         addItemToFamilyMember={this.props.addItemToFamilyMember}
+                        unSelectItems={this.props.unSelectItems}
                       />
                     </div>
                   ) : null}

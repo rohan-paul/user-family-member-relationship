@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
 
 const familyMemberRoutes = require("./routes/familyMemberRoutes");
+const unidentifiedMemberRoutes = require("./routes/unidentifiedMemberRoutes");
 const config = require("./config/config");
 
 const app = express();
@@ -59,6 +60,7 @@ app.use(
 );
 
 app.use("/api/familymemberroute", familyMemberRoutes);
+app.use("/api/unidentifiedmember-route", unidentifiedMemberRoutes);
 
 app.use((err, req, res, next) => {
   res.status(422).send({ error: err._message });

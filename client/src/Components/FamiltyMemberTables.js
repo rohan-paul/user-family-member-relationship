@@ -9,7 +9,7 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
-import data from "./familyData";
+import dataFromFile from "./familyData";
 import FamilyMemberData from "./FamilyMemberData";
 import { stableSort } from "./UtilFunctions/Utils";
 import { getSorting } from "./UtilFunctions/Utils";
@@ -39,7 +39,8 @@ class FamiltyMemberTables extends React.Component {
     orderBy: "calories",
     selected: [],
     selectedFamilyMember: [],
-    data: data,
+    unidentifiedData: dataFromFile,
+    unIdentifiedfileDataPushedToMongo: [],
     familyData: [],
     page: 0,
     rowsPerPage: 5
@@ -47,14 +48,25 @@ class FamiltyMemberTables extends React.Component {
 
   componentDidMount() {
     axios
-      .get("api/familyMemberRoute")
+      .post("/api/unidentifiedmember-route/batch", dataFromFile)
       .then(res => {
-        this.setState({
-          familyData: res.data
-        });
-      })
-      .catch(error => {
-        console.log("Error occured ", error);
+        this.setState(
+          {
+            unIdentifiedfileDataPushedToMongo: res.data
+          },
+          () => {
+            axios
+              .get("api/familyMemberRoute")
+              .then(res => {
+                this.setState({
+                  familyData: res.data
+                });
+              })
+              .catch(error => {
+                console.log("Error occured ", error);
+              });
+          }
+        );
       });
   }
 
@@ -70,6 +82,7 @@ class FamiltyMemberTables extends React.Component {
   };
 
   addItemToFamilyMember = item => {
+    console.log("THE NEW ITEM IS ", item);
     this.setState({
       selectedFamilyMember: [item, ...this.state.selectedFamilyMember]
     });
@@ -112,7 +125,9 @@ class FamiltyMemberTables extends React.Component {
 
   handleSelectAllClick = event => {
     if (event.target.checked) {
-      this.setState(state => ({ selected: state.data.map(n => n._id) }));
+      this.setState(state => ({
+        selected: state.unidentifiedData.map(n => n._id)
+      }));
       return;
     }
     this.setState({ selected: [] });
@@ -149,16 +164,23 @@ class FamiltyMemberTables extends React.Component {
 
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
+  unSelectItems = () => {
+    this.setState({
+      selected: []
+    });
+  };
+
   returnDocumentToEdit = id => {
     if (this.state.selected.length !== 0) {
-      return this.state.data.filter(item => item._id === id);
+      return this.state.unidentifiedData.filter(item => item._id === id);
     }
   };
 
   render() {
     const { classes } = this.props;
     const {
-      data,
+      unidentifiedData,
+      unIdentifiedfileDataPushedToMongo,
       familyData,
       order,
       orderBy,
@@ -169,10 +191,11 @@ class FamiltyMemberTables extends React.Component {
     } = this.state;
 
     const itemToEdit = this.returnDocumentToEdit(this.state.selected[0]);
-    console.log("ITEM TO EDIT IS ", itemToEdit);
+    // console.log("ITEM TO EDIT IS ", itemToEdit);
 
     const emptyRows =
-      rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
+      rowsPerPage -
+      Math.min(rowsPerPage, unidentifiedData.length - page * rowsPerPage);
 
     const emptyRowsFamilyTable =
       rowsPerPage -
@@ -181,9 +204,14 @@ class FamiltyMemberTables extends React.Component {
     return (
       <React.Fragment>
         <Paper className={classes.root}>
+          {console.log("FILE DATA IS ", dataFromFile)}
+          {console.log("DATA IS ", unidentifiedData)}
+          {console.log(
+            "DATA FROM MONGO API ",
+            unIdentifiedfileDataPushedToMongo
+          )}
           <FamilyMemberTableToolbar
             numSelectedFamilyMember={selectedFamilyMember.length}
-            addItemToFamilyMember={this.addItemToFamilyMember}
           />
           <div className={classes.tableWrapper}>
             <Table className={classes.table} aria-labelledby="tableTitle">
@@ -259,6 +287,8 @@ class FamiltyMemberTables extends React.Component {
           <UnidentifiedTableToolbar
             numSelected={selected.length}
             itemToEdit={itemToEdit}
+            addItemToFamilyMember={this.addItemToFamilyMember}
+            unSelectItems={this.unSelectItems}
           />
           <div className={classes.tableWrapper}>
             <Table className={classes.table} aria-labelledby="tableTitle">
@@ -268,10 +298,10 @@ class FamiltyMemberTables extends React.Component {
                 orderBy={orderBy}
                 onSelectAllClick={this.handleSelectAllClick}
                 onRequestSort={this.handleRequestSort}
-                rowCount={data.length}
+                rowCount={unidentifiedData.length}
               />
               <TableBody>
-                {stableSort(data, getSorting(order, orderBy))
+                {stableSort(unidentifiedData, getSorting(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map(n => {
                     const isSelected = this.isSelected(n._id);
@@ -311,7 +341,7 @@ class FamiltyMemberTables extends React.Component {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={data.length}
+            count={unidentifiedData.length}
             rowsPerPage={rowsPerPage}
             page={page}
             backIconButtonProps={{

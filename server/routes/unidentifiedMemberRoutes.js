@@ -1,10 +1,10 @@
 let express = require("express"),
   router = express.Router(),
-  FamilyMember = require("../models/familyMember");
+  UnidentifiedMember = require("../models/unidentifiedMember");
 
-// Get all family members
+// Get all unidentified members
 router.get("/", (req, res, next) => {
-  FamilyMember.find(
+  UnidentifiedMember.find(
     {},
     null,
     {
@@ -20,15 +20,16 @@ router.get("/", (req, res, next) => {
   );
 });
 
-// To Add New Family member
+// To Add New unidentified member
 router.post("/", (req, res, next) => {
-  let familyMember = new FamilyMember(req.body);
-  familyMember.save((error, newDocument) => {
+  let unidentifiedMember = new UnidentifiedMember(req.body);
+  unidentifiedMember.save((error, newDocument) => {
     if (error) {
       if (error.name === "MongoError" && error.code === 11000) {
         // console.log("DUPLICATE IN BACK END IS ", error);
         res.status(400).send(error);
       } else {
+        console.log("Error occured while saving to mongo", error);
         next();
       }
     } else {
@@ -37,10 +38,23 @@ router.post("/", (req, res, next) => {
   });
 });
 
+// Batch insert unidentified members when data is first loaded from either csv file or some other way
+router.post("/batch", (req, res, next) => {
+  console.log("BULK REQ.BODY IS ", req.body);
+  UnidentifiedMember.insertMany(req.body, (error, addedDocuments) => {
+    if (error) {
+      console.log("Error occurred while adding bulk documents", error);
+      next();
+    } else {
+      res.status(200).send(addedDocuments);
+    }
+  });
+});
+
 // Delete by _id - Working
 router.route("/delete").delete((req, res, next) => {
-  FamilyMember.remove(
-    { _id: { $in: req.body.familyMember_id_list_arr } },
+  UnidentifiedMember.remove(
+    { _id: { $in: req.body.unidentifiedMember_id_list_arr } },
     (err, result) => {
       if (err) {
         console.log(err);

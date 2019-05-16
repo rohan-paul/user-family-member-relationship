@@ -34,7 +34,7 @@ class EditItemConfirmSnackbar extends Component {
           onClose={closeNewItemConfirmSnackbar}
           variant="success"
           className={classes.margin}
-          message="Edited Commodity details has been saved successfully"
+          message="Edited Family Member details has been saved successfully"
         />
       </Snackbar>
     );

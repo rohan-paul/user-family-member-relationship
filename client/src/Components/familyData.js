@@ -1,6 +1,5 @@
 const data = [
   {
-    _id: "5cdc56878b9c427327ada12c",
     age: 27,
     firstName: "Shirley ",
     lastName: "Louise",
@@ -10,7 +9,6 @@ const data = [
     location: "Olney"
   },
   {
-    _id: "5cdc5687f6e223b1d409203d",
     age: 21,
     firstName: "Rochelle ",
     lastName: "Howard",

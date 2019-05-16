@@ -21,42 +21,8 @@ import FormControl from "@material-ui/core/FormControl";
 import { MenuItem } from "material-ui/Menu";
 import Typography from "@material-ui/core/Typography";
 import Input from "@material-ui/core/Input";
-
-const relationshipNames = [
-  "Father",
-  "Mother",
-  "Spouse",
-  "Son",
-  "Daughter",
-  "Brother",
-  "Sister",
-  "Friend",
-  "Colleague",
-  "Cousin",
-  "Nephew"
-];
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 550
-    }
-  }
-};
-
-function getStyles(name, that) {
-  return {
-    fontWeight:
-      that.state.imported_commodity_name.indexOf(name) === -1
-        ? that.props.theme.typography.fontWeightRegular
-        : that.props.theme.typography.fontWeightMedium,
-    width: "100%"
-  };
-}
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import relationshipNames from "./relationshipData";
 
 export class EditToAddFamilyMember extends Component {
   state = {
@@ -72,6 +38,7 @@ export class EditToAddFamilyMember extends Component {
     gender: this.props.itemToEdit[0].gender,
     location: this.props.itemToEdit[0].location,
     phone: this.props.itemToEdit[0].phone,
+    relationship: "",
     arrowRef: null
   };
 
@@ -101,7 +68,7 @@ export class EditToAddFamilyMember extends Component {
   };
 
   handleFormSubmit = () => {
-    // const { addNewItemToParentState } = this.props;
+    const { addItemToFamilyMember } = this.props;
     const {
       firstName,
       lastName,
@@ -112,6 +79,7 @@ export class EditToAddFamilyMember extends Component {
       phone,
       relationship
     } = this.state;
+
     if (
       firstName !== "" &&
       lastName !== "" &&
@@ -134,7 +102,7 @@ export class EditToAddFamilyMember extends Component {
           relationship
         })
         .then(() => {
-          this.props.addItemToFamilyMember({
+          addItemToFamilyMember({
             firstName,
             lastName,
             age,
@@ -144,16 +112,20 @@ export class EditToAddFamilyMember extends Component {
             phone,
             relationship
           });
-          this.setState({
-            open: false,
-            openNewItemAddedConfirmSnackbar: true,
-            vertical: "top",
-            horizontal: "center"
-          });
-          history.push("/votercircle");
+          this.setState(
+            {
+              open: false,
+              openNewItemAddedConfirmSnackbar: true,
+              vertical: "top",
+              horizontal: "center"
+            },
+            () => {
+              history.push("/votercircle");
+            }
+          );
         })
         .catch(error => {
-          alert("Oops something wrong happened, please try again");
+          console.log("ERROR OCCURED IN SUBMITTING DATA", error);
         });
     } else {
       this.setState({ openEmptyTextFieldSnackbar: true });
@@ -187,295 +159,298 @@ export class EditToAddFamilyMember extends Component {
     } = this.state;
 
     return (
-      <div>
-        <Dialog
-          open={this.state.open}
-          onClose={this.handleToggle}
-          aria-labelledby="form-dialog-title"
-          fullWidth={true}
-          maxWidth={"sm"}
-          variant="contained"
-          PaperProps={{
-            classes: {
-              root: classes.paper
-            }
-          }}
-          onKeyDown={this.handleEnterEscapeKeyPress}
-        >
-          <DialogTitle
-            id="form-dialog-title"
-            disableTypography
-            className={classes.dialogTitleAdd}
+      <MuiThemeProvider>
+        <div>
+          <EditIcon
+            onClick={this.handleFabOpen}
+            style={{ width: "40px" }}
+            aria-label="Edit Checked"
+          />
+          {console.log("RELATIONSHIP ", relationship)}
+          <Dialog
+            open={this.state.open}
+            onClose={this.handleToggle}
+            aria-labelledby="form-dialog-title"
+            fullWidth={true}
+            maxWidth={"sm"}
+            variant="contained"
+            PaperProps={{
+              classes: {
+                root: classes.paper
+              }
+            }}
+            onKeyDown={this.handleEnterEscapeKeyPress}
           >
-            <div className={classes.displayFlexDialogTitle}>
-              <Typography variant="h5" className={classes.dialogTitleHeading}>
-                Add Family Member Relationship
-              </Typography>
-              <IconButton
-                onClick={this.handleToggle}
-                style={{
-                  float: "right"
+            <DialogTitle
+              id="form-dialog-title"
+              disableTypography
+              className={classes.dialogTitleAdd}
+            >
+              <div className={classes.displayFlexDialogTitle}>
+                <Typography variant="h5" className={classes.dialogTitleHeading}>
+                  Add Family Member Relationship
+                </Typography>
+                <IconButton
+                  onClick={this.handleToggle}
+                  style={{
+                    float: "right"
+                  }}
+                  className={classes.button}
+                >
+                  <CancelIcon />
+                </IconButton>
+              </div>
+            </DialogTitle>
+            <DialogContent required>
+              <TextField
+                select
+                required
+                autoFocus
+                error={relationship === ""}
+                value={relationship}
+                onChange={e => {
+                  this.setState({
+                    relationship: e.target.value
+                  });
                 }}
-                className={classes.button}
-              >
-                <CancelIcon />
-              </IconButton>
-            </div>
-          </DialogTitle>
-          <DialogContent required>
-            <form className={classes.container}>
-              <FormControl className={classes.formControl}>
-                <TextField
-                  select
-                  required
-                  autoFocus
-                  error={relationship === ""}
-                  value={relationship}
-                  onChange={e => {
-                    this.setState({
-                      relationship: e.target.value
-                    });
-                  }}
-                  input={<Input id="select-multiple" />}
-                  menuprops={MenuProps}
-                  classes={{
-                    root: classes.space
-                  }}
-                  helperText={
-                    relationship === ""
-                      ? "Please enter the Relationship Name"
-                      : " "
+                input={<Input id="select-multiple" />}
+                classes={{
+                  root: classes.space
+                }}
+                helperText={
+                  relationship === ""
+                    ? "Please enter the Relationship Name"
+                    : " "
+                }
+                style={{ width: "540px" }}
+                InputProps={{
+                  classes: {
+                    underline: classes.underline
                   }
-                  style={{ width: "540px" }}
-                  InputProps={{
-                    classes: {
-                      underline: classes.underline
-                    }
+                }}
+              >
+                {relationshipNames.map(item => (
+                  <MenuItem key={item.name} value={item.name}>
+                    {item.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+
+              <TextField
+                required
+                autoFocus
+                classes={{
+                  root: classes.space
+                }}
+                value={firstName}
+                onChange={e =>
+                  this.setState({
+                    firstName: e.target.value
+                  })
+                }
+                error={firstName === ""}
+                helperText={firstName === "" ? "Please enter First Name" : " "}
+                label="First Name"
+                type="string"
+                fullWidth
+                InputProps={{
+                  classes: {
+                    underline: classes.underline
+                  }
+                }}
+              />
+              <TextField
+                required
+                autoFocus
+                classes={{
+                  root: classes.space
+                }}
+                value={lastName}
+                onChange={e =>
+                  this.setState({
+                    lastName: e.target.value
+                  })
+                }
+                error={lastName === ""}
+                helperText={lastName === "" ? "Please enter Last Name" : " "}
+                label="Last Name"
+                type="string"
+                fullWidth
+                InputProps={{
+                  classes: {
+                    underline: classes.underline
+                  }
+                }}
+              />
+              <TextField
+                required
+                autoFocus
+                classes={{
+                  root: classes.space
+                }}
+                value={age}
+                onChange={e =>
+                  this.setState({
+                    age: e.target.value
+                  })
+                }
+                error={age === ""}
+                helperText={age === "" ? "Please enter Age" : " "}
+                label="Age"
+                type="string"
+                fullWidth
+                InputProps={{
+                  classes: {
+                    underline: classes.underline
+                  }
+                }}
+              />
+              <TextField
+                required
+                autoFocus
+                classes={{
+                  root: classes.space
+                }}
+                value={email}
+                onChange={e =>
+                  this.setState({
+                    email: e.target.value
+                  })
+                }
+                error={email === ""}
+                helperText={email === "" ? "Please enter Email" : " "}
+                label="Email"
+                type="string"
+                fullWidth
+                InputProps={{
+                  classes: {
+                    underline: classes.underline
+                  }
+                }}
+              />
+              <TextField
+                required
+                autoFocus
+                classes={{
+                  root: classes.space
+                }}
+                value={gender}
+                onChange={e =>
+                  this.setState({
+                    gender: e.target.value
+                  })
+                }
+                error={gender === ""}
+                helperText={gender === "" ? "Please enter Gender" : " "}
+                label="Gender"
+                type="string"
+                fullWidth
+                InputProps={{
+                  classes: {
+                    underline: classes.underline
+                  }
+                }}
+              />
+              <TextField
+                required
+                autoFocus
+                classes={{
+                  root: classes.space
+                }}
+                value={location}
+                onChange={e =>
+                  this.setState({
+                    location: e.target.value
+                  })
+                }
+                error={location === ""}
+                helperText={location === "" ? "Please enter Location" : " "}
+                label="Location"
+                type="string"
+                fullWidth
+                InputProps={{
+                  classes: {
+                    underline: classes.underline
+                  }
+                }}
+              />
+              <TextField
+                required
+                autoFocus
+                classes={{
+                  root: classes.space
+                }}
+                value={phone}
+                onChange={e =>
+                  this.setState({
+                    phone: e.target.value
+                  })
+                }
+                error={phone === ""}
+                helperText={phone === "" ? "Please enter Phone" : " "}
+                label="Phone"
+                type="string"
+                fullWidth
+                InputProps={{
+                  classes: {
+                    underline: classes.underline
+                  }
+                }}
+              />
+            </DialogContent>
+            <DialogActions className={classes.dialogActions}>
+              <div className={classes.displayFlexDialogActions}>
+                <Button
+                  onClick={this.handleCancel}
+                  classes={{
+                    root: classes.spaceDialogAction
+                  }}
+                  variant="contained"
+                  size="large"
+                  style={{
+                    backgroundColor: "#ee0053"
                   }}
                 >
-                  {relationshipNames.map(item => (
-                    <MenuItem key={item} value={item}>
-                      {item}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </FormControl>
-            </form>
+                  Cancel
+                </Button>
+                <Button
+                  onClick={this.handleFormSubmit}
+                  classes={{
+                    root: classes.spaceDialogAction
+                  }}
+                  color="primary"
+                  variant="contained"
+                  size="large"
+                  type="submit"
+                  disabled={
+                    firstName === "" ||
+                    lastName === "" ||
+                    age === "" ||
+                    email === "" ||
+                    gender === "" ||
+                    location === "" ||
+                    phone === "" ||
+                    relationship === ""
+                  }
+                >
+                  Save
+                </Button>
+              </div>
+            </DialogActions>
+          </Dialog>
+          <NewItemAddedConfirmSnackbar
+            openNewItemAddedConfirmSnackbar={
+              this.state.openNewItemAddedConfirmSnackbar
+            }
+            closeNewItemConfirmSnackbar={this.closeNewItemConfirmSnackbar}
+          />
 
-            <TextField
-              required
-              autoFocus
-              classes={{
-                root: classes.space
-              }}
-              value={firstName}
-              onChange={e =>
-                this.setState({
-                  firstName: e.target.value
-                })
-              }
-              error={firstName === ""}
-              helperText={firstName === "" ? "Please enter First Name" : " "}
-              label="First Name"
-              type="string"
-              fullWidth
-              InputProps={{
-                classes: {
-                  underline: classes.underline
-                }
-              }}
-            />
-            <TextField
-              required
-              autoFocus
-              classes={{
-                root: classes.space
-              }}
-              value={lastName}
-              onChange={e =>
-                this.setState({
-                  lastName: e.target.value
-                })
-              }
-              error={lastName === ""}
-              helperText={lastName === "" ? "Please enter Last Name" : " "}
-              label="Last Name"
-              type="string"
-              fullWidth
-              InputProps={{
-                classes: {
-                  underline: classes.underline
-                }
-              }}
-            />
-            <TextField
-              required
-              autoFocus
-              classes={{
-                root: classes.space
-              }}
-              value={age}
-              onChange={e =>
-                this.setState({
-                  age: e.target.value
-                })
-              }
-              error={age === ""}
-              helperText={age === "" ? "Please enter Age" : " "}
-              label="Age"
-              type="string"
-              fullWidth
-              InputProps={{
-                classes: {
-                  underline: classes.underline
-                }
-              }}
-            />
-            <TextField
-              required
-              autoFocus
-              classes={{
-                root: classes.space
-              }}
-              value={email}
-              onChange={e =>
-                this.setState({
-                  email: e.target.value
-                })
-              }
-              error={email === ""}
-              helperText={email === "" ? "Please enter Email" : " "}
-              label="Email"
-              type="string"
-              fullWidth
-              InputProps={{
-                classes: {
-                  underline: classes.underline
-                }
-              }}
-            />
-            <TextField
-              required
-              autoFocus
-              classes={{
-                root: classes.space
-              }}
-              value={gender}
-              onChange={e =>
-                this.setState({
-                  gender: e.target.value
-                })
-              }
-              error={gender === ""}
-              helperText={gender === "" ? "Please enter Gender" : " "}
-              label="Gender"
-              type="string"
-              fullWidth
-              InputProps={{
-                classes: {
-                  underline: classes.underline
-                }
-              }}
-            />
-            <TextField
-              required
-              autoFocus
-              classes={{
-                root: classes.space
-              }}
-              value={location}
-              onChange={e =>
-                this.setState({
-                  location: e.target.value
-                })
-              }
-              error={location === ""}
-              helperText={location === "" ? "Please enter Location" : " "}
-              label="Location"
-              type="string"
-              fullWidth
-              InputProps={{
-                classes: {
-                  underline: classes.underline
-                }
-              }}
-            />
-            <TextField
-              required
-              autoFocus
-              classes={{
-                root: classes.space
-              }}
-              value={phone}
-              onChange={e =>
-                this.setState({
-                  phone: e.target.value
-                })
-              }
-              error={phone === ""}
-              helperText={phone === "" ? "Please enter Phone" : " "}
-              label="Phone"
-              type="string"
-              fullWidth
-              InputProps={{
-                classes: {
-                  underline: classes.underline
-                }
-              }}
-            />
-          </DialogContent>
-          <DialogActions className={classes.dialogActions}>
-            <div className={classes.displayFlexDialogActions}>
-              <Button
-                onClick={this.handleCancel}
-                classes={{
-                  root: classes.spaceDialogAction
-                }}
-                variant="contained"
-                size="large"
-                style={{
-                  backgroundColor: "#ee0053"
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={this.handleFormSubmit}
-                classes={{
-                  root: classes.spaceDialogAction
-                }}
-                color="primary"
-                variant="contained"
-                size="large"
-                type="submit"
-                disabled={
-                  firstName === "" ||
-                  lastName === "" ||
-                  age === "" ||
-                  email === "" ||
-                  gender === "" ||
-                  location === "" ||
-                  phone === "" ||
-                  relationship === ""
-                }
-              >
-                Save
-              </Button>
-            </div>
-          </DialogActions>
-        </Dialog>
-        <NewItemAddedConfirmSnackbar
-          openNewItemAddedConfirmSnackbar={
-            this.state.openNewItemAddedConfirmSnackbar
-          }
-          closeNewItemConfirmSnackbar={this.closeNewItemConfirmSnackbar}
-        />
-
-        <EmptyFieldSnackBar
-          openEmptyTextFieldSnackbar={this.state.openEmptyTextFieldSnackbar}
-          closeEmptyFieldSnackbar={this.closeEmptyFieldSnackbar}
-        />
-      </div>
+          <EmptyFieldSnackBar
+            openEmptyTextFieldSnackbar={this.state.openEmptyTextFieldSnackbar}
+            closeEmptyFieldSnackbar={this.closeEmptyFieldSnackbar}
+          />
+        </div>
+      </MuiThemeProvider>
     );
   }
 }
