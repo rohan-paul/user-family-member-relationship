@@ -58,7 +58,7 @@ app.use(
   })
 );
 
-app.use("/api/familyMemberRoute", familyMemberRoutes);
+app.use("/api/familymemberroute", familyMemberRoutes);
 
 app.use((err, req, res, next) => {
   res.status(422).send({ error: err._message });

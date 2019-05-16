@@ -69,6 +69,12 @@ class FamiltyMemberTables extends React.Component {
     this.setState({ order, orderBy });
   };
 
+  addItemToFamilyMember = item => {
+    this.setState({
+      selectedFamilyMember: [item, ...this.state.selectedFamilyMember]
+    });
+  };
+
   handleSelectAllClickFamilyData = event => {
     if (event.target.checked) {
       this.setState(state => ({
@@ -143,6 +149,12 @@ class FamiltyMemberTables extends React.Component {
 
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
+  returnDocumentToEdit = id => {
+    if (this.state.selected.length !== 0) {
+      return this.state.data.filter(item => item._id === id);
+    }
+  };
+
   render() {
     const { classes } = this.props;
     const {
@@ -156,6 +168,9 @@ class FamiltyMemberTables extends React.Component {
       page
     } = this.state;
 
+    const itemToEdit = this.returnDocumentToEdit(this.state.selected[0]);
+    console.log("ITEM TO EDIT IS ", itemToEdit);
+
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
@@ -166,11 +181,14 @@ class FamiltyMemberTables extends React.Component {
     return (
       <React.Fragment>
         <Paper className={classes.root}>
-          <FamilyMemberTableToolbar numSelected={selectedFamilyMember.length} />
+          <FamilyMemberTableToolbar
+            numSelectedFamilyMember={selectedFamilyMember.length}
+            addItemToFamilyMember={this.addItemToFamilyMember}
+          />
           <div className={classes.tableWrapper}>
             <Table className={classes.table} aria-labelledby="tableTitle">
               <FamilyMemberTableHead
-                numSelected={selectedFamilyMember.length}
+                numSelectedFamilyMember={selectedFamilyMember.length}
                 order={order}
                 orderBy={orderBy}
                 onSelectAllClick={this.handleSelectAllClickFamilyData}
@@ -238,7 +256,10 @@ class FamiltyMemberTables extends React.Component {
         </Paper>
         {/**************/}
         <Paper className={classes.root}>
-          <UnidentifiedTableToolbar numSelected={selected.length} />
+          <UnidentifiedTableToolbar
+            numSelected={selected.length}
+            itemToEdit={itemToEdit}
+          />
           <div className={classes.tableWrapper}>
             <Table className={classes.table} aria-labelledby="tableTitle">
               <UnidentifiedTableHead
