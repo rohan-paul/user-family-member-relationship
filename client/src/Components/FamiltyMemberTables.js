@@ -17,8 +17,11 @@ import UnidentifiedTableHead from "./UnidentifiedTableHead";
 import UnidentifiedTableToolbar from "./UnidentifiedTableToolbar";
 import FamilyMemberTableHead from "./FamilyMemberTableHead";
 import FamilyMemberTableToolbar from "./FamilyMemberTableToolbar";
-
-let counter = 0;
+import { showDeleteSnackbar } from "./Snackbars/showEmptyFieldAndDeleteSnackbar";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
+import "./UtilFunctions/confirmDelete.css";
+import "./UtilFunctions/snackbar.css";
 
 const styles = theme => ({
   root: {
@@ -39,8 +42,7 @@ class FamiltyMemberTables extends React.Component {
     orderBy: "calories",
     selected: [],
     selectedFamilyMember: [],
-    unidentifiedData: dataFromFile,
-    unIdentifiedfileDataPushedToMongo: [],
+    unidentifiedData: [],
     familyData: [],
     page: 0,
     rowsPerPage: 5
@@ -52,7 +54,7 @@ class FamiltyMemberTables extends React.Component {
       .then(res => {
         this.setState(
           {
-            unIdentifiedfileDataPushedToMongo: res.data
+            unidentifiedData: res.data
           },
           () => {
             axios
@@ -176,11 +178,50 @@ class FamiltyMemberTables extends React.Component {
     }
   };
 
+  confirmDeleteCustom = idArr => {
+    let payload = {
+      unidentifiedMember_id_list_arr: idArr
+    };
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div className="custom-ui">
+            <h1>Are you sure?</h1>
+            <p>You want to delete this Member</p>
+            <button onClick={onClose}>No</button>
+            <button
+              onClick={() => {
+                axios
+                  .delete("/api/unidentifiedmember-route/delete", {
+                    data: payload
+                  })
+                  .then(() => {
+                    this.setState({
+                      unidentifiedData: [this.state.unidentifiedData],
+                      selected: []
+                    });
+                  })
+                  .then(() => {
+                    showDeleteSnackbar();
+                    onClose();
+                  })
+                  .catch(error => {
+                    console.log("Could not delete", error);
+                  });
+              }}
+            >
+              Yes, Delete it!
+            </button>
+          </div>
+        );
+      }
+    });
+  };
+
   render() {
     const { classes } = this.props;
     const {
       unidentifiedData,
-      unIdentifiedfileDataPushedToMongo,
       familyData,
       order,
       orderBy,
@@ -204,12 +245,7 @@ class FamiltyMemberTables extends React.Component {
     return (
       <React.Fragment>
         <Paper className={classes.root}>
-          {console.log("FILE DATA IS ", dataFromFile)}
-          {console.log("DATA IS ", unidentifiedData)}
-          {console.log(
-            "DATA FROM MONGO API ",
-            unIdentifiedfileDataPushedToMongo
-          )}
+          {console.log("SELECTED ITEM IS ", selected)}
           <FamilyMemberTableToolbar
             numSelectedFamilyMember={selectedFamilyMember.length}
           />
@@ -286,9 +322,11 @@ class FamiltyMemberTables extends React.Component {
         <Paper className={classes.root}>
           <UnidentifiedTableToolbar
             numSelected={selected.length}
+            checkedItems={selected}
             itemToEdit={itemToEdit}
             addItemToFamilyMember={this.addItemToFamilyMember}
             unSelectItems={this.unSelectItems}
+            confirmDeleteCustom={this.confirmDeleteCustom}
           />
           <div className={classes.tableWrapper}>
             <Table className={classes.table} aria-labelledby="tableTitle">
@@ -354,6 +392,9 @@ class FamiltyMemberTables extends React.Component {
             onChangeRowsPerPage={this.handleChangeRowsPerPage}
           />
         </Paper>
+        <div id="snackbar">
+          The Commodity you selected has been successfully deleted
+        </div>
       </React.Fragment>
     );
   }

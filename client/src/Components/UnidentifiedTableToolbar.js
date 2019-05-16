@@ -24,7 +24,12 @@ class UnidentifiedTableToolbar extends Component {
     });
   };
   render() {
-    const { numSelected, classes } = this.props;
+    const {
+      numSelected,
+      classes,
+      confirmDeleteCustom,
+      checkedItems
+    } = this.props;
 
     return (
       <Toolbar
@@ -32,6 +37,7 @@ class UnidentifiedTableToolbar extends Component {
           [classes.highlight]: numSelected > 0
         })}
       >
+        {console.log("CHECKED ITEM IS ", checkedItems)}
         <div className={classes.title}>
           {numSelected > 0 ? (
             <Typography color="inherit" variant="subtitle1">
@@ -91,14 +97,24 @@ class UnidentifiedTableToolbar extends Component {
                 </IconButton>
               </Tooltip>
               <Tooltip title="Delete">
-                <IconButton aria-label="Delete">
+                <IconButton
+                  aria-label="Delete"
+                  variant="contained"
+                  className={classes.button}
+                  onClick={confirmDeleteCustom.bind(null, checkedItems)}
+                >
                   <DeleteIcon />
                 </IconButton>
               </Tooltip>
             </div>
           ) : numSelected > 0 ? (
             <Tooltip title="Delete">
-              <IconButton aria-label="Delete">
+              <IconButton
+                aria-label="Delete"
+                variant="contained"
+                className={classes.button}
+                onClick={confirmDeleteCustom.bind(null, checkedItems)}
+              >
                 <DeleteIcon />
               </IconButton>
             </Tooltip>

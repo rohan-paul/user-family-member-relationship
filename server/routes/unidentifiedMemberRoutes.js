@@ -40,7 +40,6 @@ router.post("/", (req, res, next) => {
 
 // Batch insert unidentified members when data is first loaded from either csv file or some other way
 router.post("/batch", (req, res, next) => {
-  console.log("BULK REQ.BODY IS ", req.body);
   UnidentifiedMember.insertMany(req.body, (error, addedDocuments) => {
     if (error) {
       console.log("Error occurred while adding bulk documents", error);
@@ -57,7 +56,7 @@ router.route("/delete").delete((req, res, next) => {
     { _id: { $in: req.body.unidentifiedMember_id_list_arr } },
     (err, result) => {
       if (err) {
-        console.log(err);
+        console.log("Error occurred while deleting", err);
         return next(err);
       } else {
         res.status(200).send(result);

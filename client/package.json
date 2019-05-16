@@ -27,6 +27,7 @@
         "prettier-stylelint": "^0.4.2",
         "prop-types": "^15.6.2",
         "react": "^16.8.1",
+        "react-confirm-alert": "^2.4.1",
         "react-csv-reader": "^1.2.2",
         "react-dom": "^16.8.1",
         "react-dropzone": "^10.1.4",
