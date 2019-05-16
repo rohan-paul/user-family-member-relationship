@@ -79,7 +79,16 @@ class Dashboard extends Component {
               />
             </div>
             <CardContent>
-              <div style={{ display: "flex", flexDirection: "row" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  width: "60%"
+                }}
+              >
                 <Fab color="green" aria-label="Add" className={classes.fab}>
                   <Dropzone onDrop={this.onDrop}>
                     {({ getRootProps, getInputProps }) => (
@@ -98,12 +107,31 @@ class Dashboard extends Component {
                 <Fab color="green" aria-label="Add" className={classes.fab}>
                   <ContactPhone />
                 </Fab>
+                <Fab color="green" aria-label="Add" className={classes.fab}>
+                  <ContactPhone />
+                </Fab>
               </div>
-              <div style={{ display: "flex", flexDirection: "row" }}>
-                <div style={{ marginLeft: "25px" }}>Contact file</div>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  width: "100%"
+                }}
+              >
+                <div style={{ marginLeft: "125px" }}>Contact file</div>
                 <div style={{ marginLeft: "25px" }}>From Google Platform</div>
+                <div style={{ marginLeft: "25px" }}>From Facebook Platform</div>
               </div>
-              <div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
                 <Button variant="contained" className={classes.button}>
                   <Link to={{ pathname: "/votercircle", state: { data } }}>
                     Click to assign Voter Circles

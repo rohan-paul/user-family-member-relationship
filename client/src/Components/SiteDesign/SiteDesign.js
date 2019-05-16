@@ -249,7 +249,7 @@ class SiteDesign extends React.Component {
                 alt="Port Logo"
                 className={classes.sideNavBarImage}
               />
-              <h5 className={classes.sideNavBarText}>REACT APP</h5>
+              <h5 className={classes.sideNavBarText}>Voter Circle</h5>
             </div>
             <IconButton onClick={this.handleDrawerClose}>
               {theme.direction === "rtl" ? (
@@ -259,38 +259,6 @@ class SiteDesign extends React.Component {
               )}
             </IconButton>
           </div>
-          <List>
-            <ListItem
-              button
-              key="Stock Dashboard"
-              component={Link}
-              to="/stock_dashboard"
-            >
-              <ListItemIcon>
-                <img
-                  src={ToolsIcon}
-                  className={classes.sideNavBarIcon}
-                  alt=""
-                />
-              </ListItemIcon>
-              <ListItemText primary="Stock Dashboard" />
-            </ListItem>
-            <ListItem
-              button
-              key="CSV Parsing"
-              component={Link}
-              to="/csvparsing"
-            >
-              <ListItemIcon>
-                <img
-                  src={DepartmentsIcon}
-                  className={classes.sideNavBarIcon}
-                  alt=""
-                />
-              </ListItemIcon>
-              <ListItemText primary="CSV Parsing" />
-            </ListItem>
-          </List>
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />

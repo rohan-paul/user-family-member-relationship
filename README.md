@@ -1,7 +1,12 @@
 ### MOST Important step is to upload a .csv file as the very first step
 
-- 1. From [http://localhost:3000/](http://localhost:3000/) you first need to upload the .csv file named "UnidentifiedFamilyData.csv" which I kept at dirctory `/client`
-- 2. From this .csv file some data will be uploaded and saved in MongoDB as the very first step.
+- 1. From [http://localhost:3000/](http://localhost:3000/) you first need to upload the .csv file named "UnidentifiedFamilyData.csv" which I kept at dirctory `/client` by clicing on the first circle named 'Contact File'
+- 2. Then click on the button 'Click to Assign Voter Circle' which will take you to the next route /votercircle
+- 3. Here there will be two tables one for the Unidentified and one for the Family Members
+- 4. Click on each item of the unidentified list a modal will open where you can assign the Family member and click on Save.
+- 5. Then that item will be moved to the table named 'Family Members' and deleted from the 'Unidentified' table
+- 6. From this .csv file some data will be uploaded and saved in MongoDB as the very first step.
+-
 
 To launch this project in the local machine.
 
@@ -25,14 +30,3 @@ Which will start both the client (port 3000) and server (port 5000) and launch t
 Then navigate to the public or the private (only for logged-in user) site
 
 The site is running at - [http://localhost:3000/](http://localhost:3000/)
-
-#### To run the tests
-
-`cd client` and then `npm test`
-
-
-The overall app's color of the top toolbar is determined by
-./src/Components/AppDashBoard.js
-
-
-

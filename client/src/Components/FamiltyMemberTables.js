@@ -48,11 +48,12 @@ class FamiltyMemberTables extends React.Component {
   };
 
   componentDidMount() {
+    // if (this.props.location && this.props.location.state) {
+    const unidentifiedDataFromCSV =
+      //   this.props.location &&
+      this.props.location.state && this.props.location.state.data;
     axios
-      .post(
-        "/api/unidentifiedmember-route/batch",
-        this.props.location.state.data
-      )
+      .post("/api/unidentifiedmember-route/batch", unidentifiedDataFromCSV)
       .then(res => {
         this.setState(
           {
