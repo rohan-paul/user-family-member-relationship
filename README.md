@@ -1,4 +1,4 @@
-A quick Proof-of-Concept app - which will work as below
+A quick Proof-of-Concept app which will work as below
 
 - I have a .csv file containing some people names who are part of my known circle, but the relationships to them is un-assigned at first.
 - So I upload that .csv file to the app, the app parses it and renders a table with each of those names
