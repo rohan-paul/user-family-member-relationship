@@ -26,7 +26,7 @@ class App extends Component {
               <Route path={"/"} component={AppDashBoard} />
               <Route
                 exact
-                path={"/votercircle"}
+                path={"/familycircle"}
                 component={FamiltyMemberTables}
               />
 

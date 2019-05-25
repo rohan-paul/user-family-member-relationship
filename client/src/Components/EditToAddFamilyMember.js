@@ -136,7 +136,7 @@ export class EditToAddFamilyMember extends Component {
               horizontal: "center"
             },
             () => {
-              history.push("/votercircle");
+              history.push("/familycircle");
             }
           );
         })

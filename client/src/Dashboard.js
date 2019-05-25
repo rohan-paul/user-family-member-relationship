@@ -133,8 +133,8 @@ class Dashboard extends Component {
                 }}
               >
                 <Button variant="contained" className={classes.button}>
-                  <Link to={{ pathname: "/votercircle", state: { data } }}>
-                    Click to assign Voter Circles
+                  <Link to={{ pathname: "/familycircle", state: { data } }}>
+                    Click to assign Family Circles
                   </Link>
                 </Button>
               </div>
@@ -153,4 +153,4 @@ Dashboard.propTypes = {
 export default withStyles(styles)(Dashboard);
 
 // <img src={Google} className={classes.circularIcon} alt="" />
-// <Link to="/votercircle"> Click to assgn Voter Circles </Link>
+// <Link to="/familycircle"> Click to assgn Family Circles </Link>

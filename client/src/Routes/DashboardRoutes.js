@@ -11,7 +11,7 @@ export class DashboardRoutes extends Component {
       <div>
         <Switch>
           <Route exact path={"/"} component={DashBoard} />
-          <Route exact path={"/votercircle"} component={FamiltyMemberTables} />
+          <Route exact path={"/familycircle"} component={FamiltyMemberTables} />
           <Route component={NotFound} />
         </Switch>
       </div>

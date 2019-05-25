@@ -249,7 +249,7 @@ class SiteDesign extends React.Component {
                 alt="Port Logo"
                 className={classes.sideNavBarImage}
               />
-              <h5 className={classes.sideNavBarText}>Voter Circle</h5>
+              <h5 className={classes.sideNavBarText}>Family Circle</h5>
             </div>
             <IconButton onClick={this.handleDrawerClose}>
               {theme.direction === "rtl" ? (
