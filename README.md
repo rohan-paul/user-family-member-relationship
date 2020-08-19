@@ -1,3 +1,5 @@
+### This is a 12/14 hour take-home exercise that I did in early 2018
+
 A quick Proof-of-Concept app which will work as below
 
 - I have a .csv file containing some people names who are part of my known circle, but the relationships to them is un-assigned at first.
