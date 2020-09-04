@@ -22,7 +22,7 @@
         "history": "^4.7.2",
         "material-ui": "^0.20.2",
         "npm": "^6.7.0",
-        "papaparse": "^4.6.3",
+        "papaparse": "^5.2.0",
         "prettier-eslint-cli": "^4.7.1",
         "prettier-stylelint": "^0.4.2",
         "prop-types": "^15.6.2",
